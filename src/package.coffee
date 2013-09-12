@@ -46,7 +46,7 @@ class Package
     (fs.readFileSync(lib, 'utf8') for lib in @libs).join("\n")
 
   compileAfters: ->
-    (fs.readFileSync(compilers.coffee(after), 'utf8') for after in @afters).join("\n")
+    (fs.readFileSync(after, 'utf8') for after in @afters).join("\n")
 
   compileJavascript: (minify = false) ->
     try
