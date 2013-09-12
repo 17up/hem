@@ -8,16 +8,11 @@ Hem was primarily designed for developing Spine.js based Single Page Web Applica
 
 #Installation
 
-    npm install -g hem
-
-or
-
-    npm install -g git://github.com/spine/hem.git
+    npm install -g git://github.com/17up/hem.git
 
 or ...fun trick.
 
-    hem install -g hem 
-    git clone https://github.com/spine/hem.git
+    git clone https://github.com/17up/hem.git
     cd hem
     npm link
 
