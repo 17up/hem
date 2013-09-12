@@ -18,6 +18,7 @@ class Package
     @libs        = toArray(config.libs || [])
     @paths       = toArray(config.paths || [])
     @modules     = toArray(config.modules || [])
+    @afters      = toArray(config.afters || [])
     @jsAfter     = config.jsAfter or ""
     @url         = config.url or ""
     # TODO: sanity checkes on config values??
@@ -44,16 +45,19 @@ class Package
     # TODO: be able to handle being given a folder and loading each file...can this compile coffeescript??
     (fs.readFileSync(lib, 'utf8') for lib in @libs).join("\n")
 
+  compileAfters: ->
+    (fs.readFileSync(compilers.coffee(after), 'utf8') for after in @afters).join("\n")
+
   compileJavascript: (minify = false) ->
     try
-      result = [@compileLibs(), @compileModules(), @jsAfter].join("\n")
+      result = [@compileLibs(), @compileModules(), @jsAfter, @compileAfters()].join("\n")
       result = uglify.minify(result, fromString: true).code if minify
       result
     catch ex
       @handleCompileError(ex)
 
   compileCss: (minify = false) ->
-    try 
+    try
       result = []
       for _path in @paths
         # TODO: currently this only works with index files, perhaps someday loop over the directory
@@ -119,7 +123,7 @@ class Package
     console.log "Building '#{@name}' target: #{@target}"
     source = @compile(minify)
     fs.writeFileSync(@target, source) if source
-    
+
   watch: ->
     console.log "Watching '#{@name}'"
     watchOptions = { persistent: true, interval: 1000, ignoreDotFiles: true }
